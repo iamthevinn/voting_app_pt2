@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Voting App Pt1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="node_modules/react/umd/react.development.js"></script>
+  <script src="node_modules/react-dom/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <style>
+      .rectangle {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 1px solid black;
+          width  : 300px;
+          height : 80px;
+          margin : 0 auto;
+          font-family: sans-serif;
+          font-size: 30px;
+      }
+      #circle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          width  : 50px;
+          height : 50px;
+          border-radius: 50%;
+          font-family: sans-serif;
+          font-size: 30px;
+          border: 1px solid black;
+      }
+      .voteCount {
+        width: 33%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+      }
+
+      #libraryName {
+        width:33%;
+        text-align: center;
+      }
+
+      #plusSign {
+        width: 33%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 48px;
+        color: green
+      }
+
+      </style>
+</head>
+
+<body>
+<div id="header"></div>
+<div id="votingBoxes"></div>
+<!--
+<div class="rectangle">
+    <div class="voteCount">
+      <div id="circle">5</div>
+    </div>
+    <div id="libraryName">React</div>
+    <div id="plusSign">+</div>
+</div>
+<div class="rectangle">
+    <div class="voteCount">
+      <div id="circle">12</div>
+    </div>
+    <div id="libraryName">Vue</div>
+    <div id="plusSign">+</div>
+</div>
+--> 
+  
+  <script type="text/babel">
+
+
+    const headerStyle = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontFamily: 'sans-serif',
+      fontSize: '48px'
+    }
+
+    const votingRectangleStyle = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontFamily: 'sans-serif',
+      fontSize: '30px',
+      width: '300px',
+      height: '80px',
+      margin: '0 auto',
+      border: '3px solid black',
+      marginTop: '-3px'
+    }
+
+    const votingCountStyle = {
+      width: '33%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+
+    const libraryNameStyle = {
+        width: '33%',
+        textAlign: 'center'
+      }
+    
+    const plusSignContainerStyle = {
+        width: '33%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+        
+    }
+
+    const plusSign = {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: '48px',
+        color: 'green',
+        display: 'inline'
+      }
+
+    const circleOutline = {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          width  : '50px',
+          height : '50px',
+          borderRadius: '50%',
+          fontFamily: 'sans-serif',
+          fontSize: '30px',
+          border: '1px solid black'
+      }
+
+
+    let votingData = [{
+      jsLibraryName: 'Vue', voteCount: 12
+      }, {
+        jsLibraryName: 'React', voteCount: 15
+        }, {
+          jsLibraryName: 'Angular', voteCount: 9
+          }, {
+            jsLibraryName: 'Ember', voteCount: 4
+            }]
+
+
+    function Header(props) {
+      return (
+      <p style={headerStyle}>Vote Your JS Library!</p>
+      )
+    }
+
+    function VotingBox(props) {
+      return (
+        <div key={props.key} style={votingRectangleStyle}>
+          <div style={votingCountStyle}>
+            <div style={circleOutline}>{props.numberOfVotes}</div>
+          </div>
+          <div style={libraryNameStyle}>{props.languageName}</div>
+          <div style={plusSignContainerStyle}>
+            <div style={plusSign} onClick={() => {alert("You voted for " + props.languageName)} } >+</div>
+          </div>
+        </div>
+      )
+    }
+
+    function VotingForm(props) {
+      votingData.sort(function(a, b){ return b.voteCount - a.voteCount })
+      return votingData.map((value,index) => VotingBox({key: index, languageName: votingData[index].jsLibraryName, numberOfVotes: votingData[index].voteCount}))
+    }
+
+    ReactDOM.render(<Header />, document.getElementById('header'));
+    ReactDOM.render(<VotingForm />, document.getElementById('votingBoxes'));
+
+  </script>
+</body>
+
+</html>
