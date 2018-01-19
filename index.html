@@ -32,6 +32,7 @@
         console.log(this.state.inputValue)
         updatedVotingBoxList.push(<VotingBox key={key} languageName={this.state.inputValue}/>)
         this.setState({votingBoxes: updatedVotingBoxList})
+        //updatedVotingBoxList.sort(function(a, b){ return b.voteCount - a.voteCount })
         console.log(this.state.votingBoxes)
     }
     
@@ -47,8 +48,6 @@
                 <input type="text" id="languageName" name="name" onBlur={this.captureInput}></input>
                 <button onClick={this.addVotingBox}>Submit</button>
             </div>
-            <br />
-            <br />
             <br />
             <div>
               {this.state.votingBoxes}
