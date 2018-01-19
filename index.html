@@ -18,67 +18,55 @@
     class App extends React.Component {
       constructor(props) {
         super(props);
-          this.state = {
-     
-            //votingBoxes: [],
-            votingData: []
-          }
-        //this.updatedVotingBoxList = [];
+        this.state = {
+          votingData: []
+        }
         this.inputValue = "",
         this.addVotingData = this.addVotingData.bind(this);
         this.captureInput = this.captureInput.bind(this);
-        this.sortAndRenderValues = this.sortAndRenderValues.bind(this);
         this.incrementCount = this.incrementCount.bind(this);
-         
       }
 
       addVotingData() {
         let updatedVotingData = this.state.votingData;
         updatedVotingData.push({language: this.inputValue, voteCount: 0})
-        console.log("inaddvotingdata")
-        console.log(updatedVotingData)
         this.setState({votingData: updatedVotingData})
-        //this.updatedVotingBoxList.push(<VotingBox key={this.state.votingData.length-1} id={this.state.votingData.length-1} incrementCount={this.incrementCount } data={this.state.votingData[this.state.votingData.length-1]}/>)
-        //this.sortAndRenderValues(this.updatedVotingBoxList);
         }
 
-    
-    captureInput (e) {
+      captureInput (e) {
         this.inputValue = e.target.value;
-    }
+      }
 
-    sortAndRenderValues(updatedVotingBoxList) {
-        console.log("sort")
-        let sortedData = this.state.votingData;
-        sortedData.sort(function(a, b){ return b.voteCount - a.voteCount })
-        this.setState({votingData: sortedData})
-    }
-
-    incrementCount(id) {
-      console.log("increment");
-      console.log(id)
-      let updatedVotingData = this.state.votingData;
-      updatedVotingData[id].voteCount++
-      console.log(updatedVotingData)
-      //sortAndRenderValues(this.updatedVotingBoxList)
-      this.setState({votingData: updatedVotingData})
-    }
+      incrementCount(id) {  
+        let updatedVotingData = this.state.votingData;
+        updatedVotingData[id].voteCount++
+        this.setState({votingData: updatedVotingData})
+      }
 
       render() {
-        let updatedVotingBoxList = []
-        console.log("In Render Begin")
-        console.log(this.state.votingData)
-        for (let i = 0; i < this.state.votingData.length; i++) {
-          updatedVotingBoxList.push(<VotingBox key={i} id={i} incrementCount={this.incrementCount } data={this.state.votingData[i]}/>)
+
+        const headerStyle = {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontFamily: 'sans-serif',
+          fontSize: '48px'
         }
+
+        
+        let sortedList = this.state.votingData;
+        sortedList.sort(function(a, b){ return b.voteCount - a.voteCount })
+ 
+        let updatedVotingBoxList = sortedList.map((value,index) => <VotingBox key={index} id={index} incrementCount={this.incrementCount } data={sortedList[index]}/>)
+
         return (
           <div>
             <div>
-                <label htmlFor="languageName">Enter a Language: </label>
-                <input type="text" id="languageName" name="name" onBlur={this.captureInput}></input>
+                <label>Enter a Language: </label>
+                <input type="text" onBlur={this.captureInput}></input>
                 <button onClick={this.addVotingData}>Submit</button>
             </div>
-            <br />
+            <p style={headerStyle}>Vote Your JS Library!</p>
             <div>
               {updatedVotingBoxList}
             </div>
