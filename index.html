@@ -19,38 +19,68 @@
       constructor(props) {
         super(props);
           this.state = {
-            inputValue: "",
-            votingBoxes: []
+     
+            //votingBoxes: [],
+            votingData: []
           }
-        this.addVotingBox = this.addVotingBox.bind(this);
+        //this.updatedVotingBoxList = [];
+        this.inputValue = "",
+        this.addVotingData = this.addVotingData.bind(this);
         this.captureInput = this.captureInput.bind(this);
+        this.sortAndRenderValues = this.sortAndRenderValues.bind(this);
+        this.incrementCount = this.incrementCount.bind(this);
+         
       }
 
-      addVotingBox() {
-        let updatedVotingBoxList = this.state.votingBoxes;
-        let key = this.state.votingBoxes.length;
-        console.log(this.state.inputValue)
-        updatedVotingBoxList.push(<VotingBox key={key} languageName={this.state.inputValue}/>)
-        this.setState({votingBoxes: updatedVotingBoxList})
-        //updatedVotingBoxList.sort(function(a, b){ return b.voteCount - a.voteCount })
-        console.log(this.state.votingBoxes)
-    }
+      addVotingData() {
+        let updatedVotingData = this.state.votingData;
+        updatedVotingData.push({language: this.inputValue, voteCount: 0})
+        console.log("inaddvotingdata")
+        console.log(updatedVotingData)
+        this.setState({votingData: updatedVotingData})
+        //this.updatedVotingBoxList.push(<VotingBox key={this.state.votingData.length-1} id={this.state.votingData.length-1} incrementCount={this.incrementCount } data={this.state.votingData[this.state.votingData.length-1]}/>)
+        //this.sortAndRenderValues(this.updatedVotingBoxList);
+        }
+
     
     captureInput (e) {
-        this.setState({inputValue: e.target.value})
+        this.inputValue = e.target.value;
+    }
+
+    sortAndRenderValues(updatedVotingBoxList) {
+        console.log("sort")
+        let sortedData = this.state.votingData;
+        sortedData.sort(function(a, b){ return b.voteCount - a.voteCount })
+        this.setState({votingData: sortedData})
+    }
+
+    incrementCount(id) {
+      console.log("increment");
+      console.log(id)
+      let updatedVotingData = this.state.votingData;
+      updatedVotingData[id].voteCount++
+      console.log(updatedVotingData)
+      //sortAndRenderValues(this.updatedVotingBoxList)
+      this.setState({votingData: updatedVotingData})
     }
 
       render() {
+        let updatedVotingBoxList = []
+        console.log("In Render Begin")
+        console.log(this.state.votingData)
+        for (let i = 0; i < this.state.votingData.length; i++) {
+          updatedVotingBoxList.push(<VotingBox key={i} id={i} incrementCount={this.incrementCount } data={this.state.votingData[i]}/>)
+        }
         return (
           <div>
             <div>
                 <label htmlFor="languageName">Enter a Language: </label>
                 <input type="text" id="languageName" name="name" onBlur={this.captureInput}></input>
-                <button onClick={this.addVotingBox}>Submit</button>
+                <button onClick={this.addVotingData}>Submit</button>
             </div>
             <br />
             <div>
-              {this.state.votingBoxes}
+              {updatedVotingBoxList}
             </div>
           </div>
         )
@@ -62,15 +92,7 @@
     class VotingBox extends React.Component {
       constructor(props) {
         super(props);
-        this.state = {
-          count: '0'
-        }
-        this.incrementCount = this.incrementCount.bind(this)
       }
-
-      incrementCount() {
-          this.setState({count: parseInt(this.state.count) + 1})
-        }
  
       render() {
 
@@ -140,11 +162,11 @@
         return (
             <div style={votingRectangleStyle}>
               <div style={votingCountStyle}>
-                <div style={circleOutline}>{this.state.count}</div>
+                <div style={circleOutline}>{this.props.data.voteCount}</div>
               </div>
-              <div style={libraryNameStyle}>{this.props.languageName}</div>
+              <div style={libraryNameStyle}>{this.props.data.language}</div>
               <div style={plusSignContainerStyle}>
-                <div style={plusSign} onClick={ this.incrementCount } >+</div>
+                <div style={plusSign} onClick={ () => {this.props.incrementCount(this.props.id)}} >+</div>
               </div>
             </div>
           )
