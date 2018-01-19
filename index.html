@@ -19,7 +19,10 @@
       constructor(props) {
         super(props);
         this.state = {
-          votingData: []
+          votingData: [{language: "Vue", voteCount: 12},
+                       {language: "Ember", voteCount: 4},
+                       {language: "Angular", voteCount: 9},
+                       {language: "React", voteCount: 15}]
         }
         this.inputValue = "",
         this.addVotingData = this.addVotingData.bind(this);
